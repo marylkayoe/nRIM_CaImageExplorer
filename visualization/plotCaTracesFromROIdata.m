@@ -77,6 +77,13 @@ for i = 1:numROIs
         'HorizontalAlignment', 'right', 'VerticalAlignment', 'middle', ...
         'Color', cmap(i, :), 'FontSize', 12);
 end
+
+% After your plotting loop, add this code
+maxTraceLabelY = max(get(gca, 'YLim'));  % Get the maximum y-axis limit
+text('Units', 'normalized', 'Position', [0.95, 0.98], 'String', 'ROI', ...
+     'HorizontalAlignment', 'left', 'VerticalAlignment', 'top', ...
+     'Color', 'w', 'FontSize', 12, 'Parent', axesHandle);  % Adjust color and font size as needed
+
 % Set the background color to black
 
 hold(axesHandle, 'off');
