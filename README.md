@@ -18,7 +18,7 @@ This README file is a stub for now, will work in the contents later...
 - [Credits](#credits)
 - [Citation](#citation)
 
-  ## Introduction
+## Introduction
 Besides helping to get quick insights from imaging data, the purpose of this repository is to explore and experiment with ways to make code and repository easily understood, maintained, and modified. It aims to maintain consistency of convention and incorporate mindful (intentional) programming principles.
 
 ## Getting Started
