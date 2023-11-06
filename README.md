@@ -42,12 +42,13 @@ To use nRIM_CaImageExplorer, follow these steps:
 4. Add the repository to your MATLAB path. You can do this by running the following command in the MATLAB Command Window:
 
    ```matlab
-   addpath(genpath('path_to_nRIM_CaImageExplorer'));```
+   addpath(genpath('path_to_nRIM_CaImageExplorer'));
    (Replace path_to_nRIM_CaImageExplorer with the actual path to the folder where you saved the repository.)
    
-   Save the path for future MATLAB sessions:
+5. Save the path for future MATLAB sessions:
   ```matlab
-   savepath;```
+   savepath;
+
 
 ## Core functions
 (... denotes additional optional parameters))
