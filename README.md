@@ -12,6 +12,9 @@ This README file is a stub for now, will work in the contents later...
   - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
+  - [Core functions](#core-functions)
+  - [Utility Functions](#utility-functions)
+  - [Examples](#examples)
   - [Contributing](#contributing)
   - [Code of Conduct](#code-of-conduct)
   - [License](#license)
@@ -43,11 +46,13 @@ To use nRIM_CaImageExplorer, follow these steps:
 
    ```matlab
    addpath(genpath('path_to_nRIM_CaImageExplorer'));
+   ```
    (Replace path_to_nRIM_CaImageExplorer with the actual path to the folder where you saved the repository.)
    
 5. Save the path for future MATLAB sessions:
   ```matlab
    savepath;
+   ```
 
 
 ## Core functions
