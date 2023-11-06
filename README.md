@@ -91,6 +91,9 @@ To process all recordings in a folder:
 showCaRecordingsInFolder('./examples/', 20, 'stimTimes', [30 45 60 75 90 105 120], 'stimDuration', 5, 'preWin', 2, 'postWin', 5);
 ```
 
+![Example Output](assets/CaImageExplorer_output1.png "Example of output for showCaRecording")
+
+
 ## Contributing
 (Outline the process for contributing to the repository. This could include how to submit issues and pull requests, and any coding standards or tests contributors need to follow. Link to a CONTRIBUTING.md file if you have one.)
 
