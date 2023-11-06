@@ -25,7 +25,7 @@ This README file is a stub for now, will work in the contents later...
 Besides helping to get quick insights from imaging data, the purpose of this repository is to explore and experiment with ways to make code and repository easily understood, maintained, and modified. It aims to maintain consistency of convention and incorporate mindful (intentional) programming principles.
 
 ## Getting Started
-(Briefly describe what steps need to be taken to get the software running. Include links to detailed INSTALL.md if necessary.)
+At the moment there is code to provide a simple visualization of calcium image recordings, indicating times of stimulation. Later I will add functionality for simple Ca-trace extraction from TIFF files.
 
 ## Prerequisites
 Before using nRIM_CaImageExplorer, ensure you have MATLAB (version 2019a or newer) installed with the following toolboxes:
