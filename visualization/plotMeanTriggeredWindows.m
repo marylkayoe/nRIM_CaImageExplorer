@@ -1,4 +1,4 @@
-function plotMeanTriggeredWindows(triggeredWindows, preWin, stimDuration, framerate, plotTitle)
+function plotMeanTriggeredWindows(triggeredWindows, preWin, stimDuration, framerate, plotTitle, varargin)
 % plotMeanTriggeredWindows Plots mean triggered windows for each ROI and the grand average.
 %
 % Parameters:
@@ -9,13 +9,33 @@ function plotMeanTriggeredWindows(triggeredWindows, preWin, stimDuration, framer
 % framerate - Sampling rate in Hz
 % plotTitle - Title for the plot
 
-% Validate input dimensions
-assert(ndims(triggeredWindows) == 3, 'triggeredWindows must be a 3D array (time x windows x ROIs).');
+  % Validate input dimensions
+    assert(ndims(triggeredWindows) == 3, 'triggeredWindows must be a 3D array (time x windows x ROIs).');
 
-% Initialize figure and axes
-figHandle = figure;
-axesHandle = axes;
+    % Set up input parser for optional parameters
+    p = inputParser;
+    addRequired(p, 'triggeredWindows', @(x) validateattributes(x, {'numeric'}, {'3d', 'nonempty'}));
+    addRequired(p, 'preWin', @(x) validateattributes(x, {'numeric'}, {'nonnegative', 'scalar'}));
+    addRequired(p, 'stimDuration', @(x) validateattributes(x, {'numeric'}, {'nonnegative', 'scalar'}));
+    addRequired(p, 'framerate', @(x) validateattributes(x, {'numeric'}, {'positive', 'scalar'}));
+    addOptional(p, 'plotTitle', 'Ca recording', @(x) validateattributes(x, {'char', 'string'}, {'scalartext'}));
+    addOptional(p, 'axesHandle', gca, @(x) isempty(x) || isa(x, 'matlab.graphics.axis.Axes'));
+   addParameter(p, 'figHandle', [], @(x) isempty(x) || isa(x, 'matlab.ui.Figure'));
+    parse(p, triggeredWindows, preWin, stimDuration, framerate, plotTitle, varargin{:});
 
+    % Extract the parameters after parsing
+    triggeredWindows = p.Results.triggeredWindows;
+    preWin = p.Results.preWin;
+    stimDuration = p.Results.stimDuration;
+    framerate = p.Results.framerate;
+    plotTitle = p.Results.plotTitle;
+    axesHandle = p.Results.axesHandle;
+    figHandle = p.Results.figHandle;
+
+    if isempty(axesHandle) || ~isvalid(axesHandle)
+     %   figHandle = figure;
+        axesHandle = axes(figHandle);
+    end
 % Set the x-axis using the utility function
 xAxis = makeXAxisFromFrames(size(triggeredWindows, 1), framerate, 'seconds') - preWin;
 

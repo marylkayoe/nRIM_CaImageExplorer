@@ -18,7 +18,7 @@ function [traces, metadata] = readTraceData(filename, varargin)
         case '.csv'
             [traces, metadata] = readCsvTraces(filename, varargin{:});
         case '.mat'
-            [traces] = readMatTraces(filename, varargin{:});
+            [traces] = readMatTraces(filename);
             metadata = [];
         otherwise
             error('readTraceData:UnsupportedFileType', ...

@@ -26,39 +26,28 @@ function plotCaTracesWithStim(traceData, framerate, varargin)
     %   plotCaTracesWithStim(traceData, 20, 'plotTitle', 'Calcium Traces with Stimulations');
 
     %% Validate inputs and set defaults if necessary
-    defaultStimTimes = [];
-    defaultStimDuration = [];
-    defaultAxesHandle = [];
-    defaultPlotTitle = 'Calcium Traces with Stimulation';
-
-    %% parsing inputs
-    params = inputParser;
-
+    % Validate inputs and set defaults
+    p = inputParser;
+    
     % Mandatory parameters
-    addRequired(params, 'traceData', @(x) validateattributes(x, {'numeric'}, {'2d', 'nonempty'}));
-    addRequired(params, 'framerate', @(x) validateattributes(x, {'numeric'}, {'positive', 'scalar'}));
-
-    % Optional parameters
-    addOptional(params, 'stimTimes', defaultStimTimes, @(x) validateattributes(x, {'numeric'}, {'vector', 'nonnegative'}));
-    addOptional(params, 'stimDuration', defaultStimDuration, @(x) validateattributes(x, {'numeric'}, {'nonnegative', 'scalar'}));
-    addOptional(params, 'axesHandle', defaultAxesHandle, @(x) isempty(x) || isa(x, 'matlab.graphics.axis.Axes'));
-    addOptional(params, 'plotTitle', defaultPlotTitle, @(x) validateattributes(x, {'char', 'string'}, {'scalartext'}));
-
-    % Parse the inputs
-    parse(params, traceData, framerate, varargin{:});
-
-    % Extract the parameters
-    stimTimes = params.Results.stimTimes;
-    stimDuration = params.Results.stimDuration;
-    axesHandle = params.Results.axesHandle;
-    plotTitle = params.Results.plotTitle;
-
-    % Make new figure if axesHandle is empty
-    if isempty(axesHandle)
-        figure; 
-        axesHandle = gca; 
-    end
-
+    addRequired(p, 'traceData', @(x) validateattributes(x, {'numeric'}, {'2d', 'nonempty'}));
+    addRequired(p, 'framerate', @(x) validateattributes(x, {'numeric'}, {'positive', 'scalar'}));
+    
+    % Optional parameters with default values
+    addParameter(p, 'stimTimes', [], @(x) validateattributes(x, {'numeric'}, {'vector', 'nonnegative'}));
+    addParameter(p, 'stimDuration', [], @(x) validateattributes(x, {'numeric'}, {'nonnegative', 'scalar'}));
+    addParameter(p, 'axesHandle', gca, @(x) isempty(x) || isa(x, 'matlab.graphics.axis.Axes'));
+    addParameter(p, 'plotTitle', 'Calcium Traces with Stimulation', @(x) validateattributes(x, {'char', 'string'}, {'scalartext'}));
+    
+    % Parse input arguments
+    parse(p, traceData, framerate, varargin{:});
+    
+    % Extract variables from parsed input
+    stimTimes = p.Results.stimTimes;
+    stimDuration = p.Results.stimDuration;
+    axesHandle = p.Results.axesHandle;
+    plotTitle = p.Results.plotTitle;
+    
     % Call the function to plot calcium traces in our figure
     plotCaTracesFromROIdata(traceData, framerate, axesHandle);
 

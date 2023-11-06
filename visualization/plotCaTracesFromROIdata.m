@@ -51,7 +51,6 @@ else
 end
 
 
-% Plotting ..
 % Generate x-axis for the plot based on the number of frames and framerate
 xAx = makeXAxisFromFrames(nFRAMES, framerate);  % Assuming the number of columns represents the number of frames
 
@@ -91,24 +90,7 @@ hold(axesHandle, 'off');
 xlabel(axesHandle, 'Time (s)', 'Color', 'w'); % Set X-axis label color to white
 ylabel(axesHandle, 'Fluorescence (a.u.)', 'Color', 'w'); % Set Y-axis label color to white
 title(axesHandle, plotTitle, 'Color', 'w'); % Set title text color to white
-
-% Customize the axes
-axesHandle.Color = 'k'; % Set the axes background color to black
-axesHandle.XColor = 'w'; % Set the X-axis line and tick color to white
-axesHandle.YColor = 'w'; % Set the Y-axis line and tick color to white
-axesHandle.LineWidth = 1.5; % Set the line width of the axes
-axesHandle.GridAlpha = 0.2; % Set the transparency of the grid lines
-
-% Remove tick labels
-set(axesHandle, 'YTickLabel', []); % Remove Y-axis tick labels
-
-% Set font properties
-set(axesHandle, 'FontName', 'Arial', 'FontSize', 12, 'FontWeight', 'bold');
-
-% Set plot background color
-fig = axesHandle.Parent; % Get the parent figure of the axes
-set(fig, 'color', 'k'); % Set the figure background color to black
-
+applyCustomFigureStyle(gcf, axesHandle);
 
 
 end
