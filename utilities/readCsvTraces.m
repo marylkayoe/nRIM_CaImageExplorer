@@ -23,7 +23,7 @@ function [traces, metadata] = readCsvTraces(filename, varargin)
     params = inputParser;
     addParameter(params, 'HasHeaders', true, @islogical);
     addParameter(params, 'NumHeaderLines', 1, @isnumeric);
-    addParameter(params, 'startColIndex', 0, @isnumeric); % Default to 0, which means the first column
+    addParameter(params, 'startColIndex', 1, @isnumeric); % Default to 0, which means the first column
     addParameter(params, 'Delimiter', ',', @ischar);
     parse(params, varargin{:});
 

@@ -6,17 +6,17 @@ Besides helping out to get quick insights from imaging data, the purpose of this
 This README file is a stub for now, will work in the contents later... 
 
 ## Table of Contents
-- [Introduction](#introduction)
-- [Getting Started](#getting-started)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Examples](#examples)
-- [Contributing](#contributing)
-- [Code of Conduct](#code-of-conduct)
-- [License](#license)
-- [Credits](#credits)
-- [Citation](#citation)
+- [nRIM\_CaImageExplorer](#nrim_caimageexplorer)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Contributing](#contributing)
+  - [Code of Conduct](#code-of-conduct)
+  - [License](#license)
+  - [Credits](#credits)
+  - [Citation](#citation)
 
 ## Introduction
 Besides helping to get quick insights from imaging data, the purpose of this repository is to explore and experiment with ways to make code and repository easily understood, maintained, and modified. It aims to maintain consistency of convention and incorporate mindful (intentional) programming principles.
@@ -25,16 +25,65 @@ Besides helping to get quick insights from imaging data, the purpose of this rep
 (Briefly describe what steps need to be taken to get the software running. Include links to detailed INSTALL.md if necessary.)
 
 ## Prerequisites
-(List any required libraries, tools, or frameworks that users need to have before installing this software.)
+Before using nRIM_CaImageExplorer, ensure you have MATLAB (version 2019a or newer) installed with the following toolboxes:
+- Image Processing Toolbox
+- Signal Processing Toolbox
+- Statistics and Machine Learning Toolbox
+
+Note: This list is not exhaustive and should be updated based on the actual toolboxes used by nRIM_CaImageExplorer.
 
 ## Installation
-(Provide a step-by-step description of how to install the software.)
 
-## Usage
-(Explain how to use the software with examples, including any environment setup or scripts to run.)
+To use nRIM_CaImageExplorer, follow these steps:
+
+1. Clone or download this repository to your local machine.
+2. Open MATLAB.
+3. Navigate to the directory where you saved the repository.
+4. Add the repository to your MATLAB path. You can do this by running the following command in the MATLAB Command Window:
+
+   ```matlab
+   addpath(genpath('path_to_nRIM_CaImageExplorer'));```
+   (Replace path_to_nRIM_CaImageExplorer with the actual path to the folder where you saved the repository.)
+   
+   Save the path for future MATLAB sessions:
+  ```matlab
+   savepath;```
+
+## Core functions
+(... denotes additional optional parameters))
+
+- `readTraceData(filename, ...)`: Reads calcium imaging trace data from a file (supports .mat and .csv formats).
+- `validateTraceData(traces)`: Validates the integrity and format of the trace data, ensuring it meets expected dimensions and types.
+- `plotCaTracesFromROIdata(traceData, framerate, ...)`: Plots calcium imaging traces for a given ROI data set.
+- `extractTriggeredWindows(traceData, stimTimes, stimDuration, preWin, postWin, framerate)`: Extract windows of trace data around stimulation times.
+- `plotCaTracesWithStim(traceData, framerate, ...)`: Plots calcium traces with overlaid stimulation periods, if provided.
+- `plotMeanTriggeredWindows(triggeredWindows, preWin, postWin, stimDuration, framerate)`: Plots the mean activity across all regions of interest (ROIs) for specified pre- and post-stimulation windows.
+- `showCaRecording(filename, framerate, ...)`: Creates a figure with both raw calcium traces and their triggered averages, given a file with trace data.
+
+
+
+## Utility Functions
+
+- `sec2frames(seconds, framerate)`: Converts a time value from seconds to frames based on the given framerate.
+- `frames2sec(frames, framerate)`: Converts a frame count to seconds based on the given framerate.
+- `makeXAxisFromFrames(numFrames, framerate, unit)`: Generates an x-axis for plotting based on the number of frames and the framerate.
+- `generateCustomColormap(numColors)`: Creates a custom colormap for differentiating multiple traces in a plot.
+- `drawStimulationRectangle(axesHandle, stimTime, stimDuration, yLimits)`: Adds a rectangle to the plot to indicate the period of stimulation.
+- `applyCustomFigureStyle(figHandle, axesHandle)`: Applies a custom style to the figure and axes to maintain consistency in the visual appearance of plots.
+
 
 ## Examples
-(Provide examples of how to use the software. This could be a link to a separate EXAMPLES.md file or a wiki page.)
+
+
+Here's how you can visualize a recording with stimulation events:
+
+```matlab
+showCaRecording('example_data.mat', 20, 'stimTimes', [30 45 60 75 90 105 120], 'stimDuration', 5, 'preWin', 2, 'postWin', 5);
+```
+To process all recordings in a folder:
+```matlab
+showCaRecordingsInFolder('./examples/', 20, 'stimTimes', [30 45 60 75 90 105 120], 'stimDuration', 5, 'preWin', 2, 'postWin', 5);
+```
 
 ## Contributing
 (Outline the process for contributing to the repository. This could include how to submit issues and pull requests, and any coding standards or tests contributors need to follow. Link to a CONTRIBUTING.md file if you have one.)
