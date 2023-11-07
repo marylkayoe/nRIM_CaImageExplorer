@@ -15,6 +15,7 @@ This README file is a stub for now, will work in the contents later...
   - [Core functions](#core-functions)
   - [Utility Functions](#utility-functions)
   - [Examples](#examples)
+  - [To-Do List](#to-do-list)
   - [Contributing](#contributing)
   - [Code of Conduct](#code-of-conduct)
   - [License](#license)
@@ -92,6 +93,15 @@ showCaRecordingsInFolder('./examples/', 20, 'stimTimes', [30 45 60 75 90 105 120
 ```
 
 ![Example Output](assets/CaImageExplorer_output1.png "Example of output for showCaRecording")
+
+
+
+## To-Do List
+
+- [ ] Implement basic analysis functionality for calcium imaging data.
+- [ ] Add a simple algorithm for extracting calcium traces from TIFF stacks.
+- [ ] Add more flexibility in the plotting, e.g. multiple stimulation types in a trial
+- [ ] Add functionality to deal with multiple trials in a batch (e.g. for averaging)
 
 
 ## Contributing
