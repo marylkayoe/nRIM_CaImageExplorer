@@ -20,7 +20,7 @@ function plotMeanTriggeredWindows(triggeredWindows, preWin, stimDuration, framer
     addRequired(p, 'framerate', @(x) validateattributes(x, {'numeric'}, {'positive', 'scalar'}));
     addOptional(p, 'plotTitle', 'Ca recording', @(x) validateattributes(x, {'char', 'string'}, {'scalartext'}));
     addOptional(p, 'axesHandle', gca, @(x) isempty(x) || isa(x, 'matlab.graphics.axis.Axes'));
-    addOptional(p, 'legendText','ROI', @(x) validateattributes(x, {'char', 'string'}, {'scalartext'}));
+    addOptional(p, 'legendText','Ca recording', @(x) validateattributes(x, {'char', 'string'}, {'scalartext'}));
    addParameter(p, 'figHandle', [], @(x) isempty(x) || isa(x, 'matlab.ui.Figure'));
     parse(p, triggeredWindows, preWin, stimDuration, framerate, plotTitle, varargin{:});
 
@@ -32,7 +32,6 @@ function plotMeanTriggeredWindows(triggeredWindows, preWin, stimDuration, framer
     plotTitle = p.Results.plotTitle;
     axesHandle = p.Results.axesHandle;
     figHandle = p.Results.figHandle;
-    legendText = p.Results.legendText;
 
     if isempty(axesHandle) || ~isvalid(axesHandle)
      %   figHandle = figure;
@@ -77,11 +76,11 @@ drawStimulationRectangle(axesHandle, stimDuration, ylim(axesHandle));
 applyCustomFigureStyle(figHandle, axesHandle);
 
 % Create legend
-legendLabels = arrayfun(@(x) sprintf([legendText '%d'], x), 1:numROIs, 'UniformOutput', false);
+legendLabels = arrayfun(@(x) sprintf('ROI %d', x), 1:numROIs, 'UniformOutput', false);
 legendLabels = legendLabels';
-legendHandle = legend([plotHandles; grandMeanHandle], [legendLabels; {'Grand Average'}], 'TextColor', 'white', 'Location','eastoutside');
-set(legendHandle, 'FontSize', 8); % Adjust the font size as needed
-axis("tight");
+legend([plotHandles; grandMeanHandle], [legendLabels; {'Grand Average'}], 'TextColor', 'white', 'Location','eastoutside');
+
+
 % Set title with custom color
 titleHandle = title(axesHandle, plotTitle);
 set(titleHandle, 'Color', 'w'); % Set title color to white
