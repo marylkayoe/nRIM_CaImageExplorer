@@ -20,7 +20,7 @@ function adjustedStack = adjustStackTo8b(tiffStack)
         % Adjust intensity based on global min and max
         frame = (frame - globalMin) / (globalMax - globalMin);
         
-        frame = imadjust(frame, [], [], 0.5);
+        frame = imadjust(frame, [], [], 1.5);
         frame = uint8(255 * frame); % Convert to 8-bit
         adjustedStack(:,:,i) = frame;
     end

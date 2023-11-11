@@ -116,6 +116,7 @@ hold(axesHandle, 'off');
 xlabel(axesHandle, 'Time (s)', 'Color', 'w'); % Set X-axis label color to white
 ylabel(axesHandle, 'Fluorescence (a.u.)', 'Color', 'w'); % Set Y-axis label color to white
 title(axesHandle, plotTitle, 'Color', 'w'); % Set title text color to white
+set(axesHandle, 'YTick', []);
 applyCustomFigureStyle(gcf, axesHandle);
 
 

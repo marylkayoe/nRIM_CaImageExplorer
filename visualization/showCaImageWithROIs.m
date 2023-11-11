@@ -23,5 +23,6 @@ function showCaImageWithROIs(image, pixelSize, roiList)
              'Color', 'yellow', 'HorizontalAlignment', 'center');
     end
 
+
     hold off;
 end

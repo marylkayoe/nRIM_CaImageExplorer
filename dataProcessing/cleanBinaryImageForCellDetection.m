@@ -28,6 +28,10 @@ openedImage = imopen(binaryImage, se);
 % Filling gaps (morphological closing)
 closedImage = imclose(openedImage, se);
 
+    % Dilation to slightly expand the ROIs
+   % dilatedImage = imdilate(closedImage, strel('disk', 1));  % Adjust the dilation size as needed
+
+
 % Size filtering
 minCellArea = pi * (minSomaDiameterPixels/2)^2;  % Minimum area based on expected cell radius
 maxCellArea = 16 * minCellArea;  % Allow some variation in size
