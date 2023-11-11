@@ -4,22 +4,25 @@ function plotCaImgProjection(projectionImg, pixelSize, varargin)
     % Parameters:
     % projectionImg - A 2D matrix containing projection image
     % pixelSize - Size of a pixel in micrometers
-    % varargin - Variable input arguments (including axesHandle)
+    % varargin - Variable input arguments (including axesHandle, title)
 
     % Create an inputParser instance
     p = inputParser;
 
     % Define default values for optional parameters
     defaultAxesHandle = gca;
+    defaultTitle = ''; % Default is an empty title
 
     % Add optional parameters to the input parser
-    addOptional(p, 'axesHandle', defaultAxesHandle, @(x) isa(x, 'matlab.graphics.axis.Axes'));
+    addParameter(p, 'axesHandle', defaultAxesHandle, @(x) isa(x, 'matlab.graphics.axis.Axes'));
+    addParameter(p, 'title', defaultTitle, @ischar); % Add the title parameter
 
     % Parse the input arguments
     parse(p, varargin{:});
 
     % Retrieve the parameters
     axesHandle = p.Results.axesHandle;
+    plotTitle = p.Results.title;
 
     [ySize xSize] = size(projectionImg);
 
@@ -40,7 +43,7 @@ function plotCaImgProjection(projectionImg, pixelSize, varargin)
     text(barPosition(1) + barPosition(3)/2, barPosition(2) - 10, sprintf('%d \x3BCm', scaleBarLengthMicrometers), ...
          'Color', 'white', 'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom', 'Parent', axesHandle);
 
-    title ('Projection image');
+    title (plotTitle);
     set(axesHandle, 'XTick', [], 'YTick', []);
 
 end
