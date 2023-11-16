@@ -14,6 +14,7 @@ function showCaTracesFromRecording(filename, pixelSize, minSomaSize, framerate, 
 
 % Create an inputParser instance for optional parameters
 p = inputParser;
+addParameter(p, 'sensitivity', 0.05, @(x) isnumeric(x) && x >= 0 && x <= 1);
 addParameter(p, 'stimTimes', [], @isnumeric);
 addParameter(p, 'stimDuration', 0, @isnumeric);
 addParameter(p, 'preWin', 2, @isnumeric);
@@ -23,10 +24,11 @@ stimTimes = p.Results.stimTimes;
 stimDuration = p.Results.stimDuration;
 preWin = p.Results.preWin;
 postWin = p.Results.postWin;
+sensitivity = p.Results.sensitivity;
 
 
 % Extract calcium traces from the file
-[ roiList, traceData, projectionImg] = extractCaTracesFromFile(filename, pixelSize, minSomaSize);
+[ roiList, traceData, projectionImg] = extractCaTracesFromFile(filename, pixelSize, minSomaSize, framerate, sensitivity);
 
 if isempty(roiList)
     warning('check your parameters');

@@ -1,9 +1,8 @@
 # nRIM_CaImageExplorer
 A straightforward set of MATLAB tools for quick visualization and basic analysis of calcium imaging data, meant for nRIM members.
 
-Besides helping out to get quick insights from imaging data, the purpose of this repository is to explore and experiment on ways to make code and repository easily understood, maintained and modified. It aims to maintain consistency of convention, and incorporate mindful (intentional) programming principles.
+Besides helping out to get quick insights from imaging data, the purpose of this repository is to explore and experiment on ways to make code and repository easily understood, maintained and modified. It tries to maintain consistency of convention, and incorporate mindful (intentional) programming principles.
 
-This README file is a stub for now, will work in the contents later... 
 
 ## Table of Contents
 - [nRIM\_CaImageExplorer](#nrim_caimageexplorer)
@@ -23,13 +22,21 @@ This README file is a stub for now, will work in the contents later...
   - [Citation](#citation)
 
 ## Introduction
-Besides helping to get quick insights from imaging data, the purpose of this repository is to explore and experiment with ways to make code and repository easily understood, maintained, and modified. It aims to maintain consistency of convention and incorporate mindful (intentional) programming principles.
-NOTE: this code is not meant for publication figures. Just for quick visualization and basic analysis of calcium data exploration, meant for nRIM members.
+nRIM_CaImageExplorer facilitates both quick visualizations of calcium imaging recordings and basic analyses. It now includes functionalities for extracting calcium traces directly from TIFF stacks and plotting these traces, with or without stimulation data. This repository aims to provide a foundation for future expansion and collaboration within the nRIM community.
+
+The toolkit now supports two primary use cases:
+
+Visualization from Pre-Extracted Traces: Visualizing and analyzing calcium trace data from previously extracted files (e.g., .mat, .csv).
+Trace Extraction and Visualization from TIFF Stacks: Direct extraction of calcium traces from TIFF stacks of calcium recordings, followed by visualization and basic analysis.
+
+
+Note: This code is intended for quick visualizations and basic analyses, not for publication-quality figures.
+
+
+
 
 ## Getting Started
 At the moment there is code to provide a simple visualization of calcium image recordings, indicating times of stimulation. Later I will add functionality for simple Ca-trace extraction from TIFF files.
-
-## Prerequisites
 Before using nRIM_CaImageExplorer, ensure you have MATLAB (version 2019a or newer) installed with the following toolboxes:
 - Image Processing Toolbox
 - Signal Processing Toolbox
@@ -60,17 +67,22 @@ To use nRIM_CaImageExplorer, follow these steps:
 ## Core functions
 (... denotes additional optional parameters))
 
-- `readTraceData(filename, ...)`: Reads calcium imaging trace data from a file (supports .mat and .csv formats).
-- `validateTraceData(traces)`: Validates the integrity and format of the trace data, ensuring it meets expected dimensions and types.
+- `showExtractedTracesFromCaRecording(filename, framerate, ...)`: Creates a figure with both raw calcium traces and their triggered averages, given a file with trace data.
+- `showCaTracesFromCaRecording(filename, framerate, ...)`: processes a calcium imaging TIFF file to extract and visualize calcium traces.
+- `thresholdImageForSomataDetection(image, somaDiameterPixels, sensitivity)`: simple thresholding of a std-projection of ca-recording. Adjust the values for better results
+- `cleanBinaryImageForCellDetection(binaryImage, minSomaDiameterPixels)` : morphological cleaning of thresholding. 
 - `plotCaTracesFromROIdata(traceData, framerate, ...)`: Plots calcium imaging traces for a given ROI data set.
 - `extractTriggeredWindows(traceData, stimTimes, stimDuration, preWin, postWin, framerate)`: Extract windows of trace data around stimulation times.
 - `plotCaTracesWithStim(traceData, framerate, ...)`: Plots calcium traces with overlaid stimulation periods, if provided.
 - `plotMeanTriggeredWindows(triggeredWindows, preWin, postWin, stimDuration, framerate)`: Plots the mean activity across all regions of interest (ROIs) for specified pre- and post-stimulation windows.
-- `showCaRecording(filename, framerate, ...)`: Creates a figure with both raw calcium traces and their triggered averages, given a file with trace data.
-
 
 
 ## Utility Functions
+
+
+
+- `readTraceData(filename, ...)`: Reads calcium imaging trace data from a file (supports .mat and .csv formats).
+- `validateTraceData(traces)`: Validates the integrity and format of the trace data, ensuring it meets expected dimensions and types.
 
 - `sec2frames(seconds, framerate)`: Converts a time value from seconds to frames based on the given framerate.
 - `frames2sec(frames, framerate)`: Converts a frame count to seconds based on the given framerate.
@@ -83,24 +95,40 @@ To use nRIM_CaImageExplorer, follow these steps:
 ## Examples
 
 
-Here's how you can visualize a recording with stimulation events:
+Here's how you can visualize a extracted traces recording with stimulation events:
 
 ```matlab
-showCaRecording('example_data.mat', 20, 'stimTimes', [30 45 60 75 90 105 120], 'stimDuration', 5, 'preWin', 2, 'postWin', 5);
+showExtractedTracesFromCaRecording('example_data.mat', 20, 'stimTimes', [30 45 60 75 90 105 120], 'stimDuration', 5, 'preWin', 2, 'postWin', 5);
 ```
 To process all recordings in a folder:
 ```matlab
-showCaRecordingsInFolder('./examples/', 20, 'stimTimes', [30 45 60 75 90 105 120], 'stimDuration', 5, 'preWin', 2, 'postWin', 5);
+showExtractedTracesFromCaRecordingsInFolder('./examples/', 20, 'stimTimes', [30 45 60 75 90 105 120], 'stimDuration', 5, 'preWin', 2, 'postWin', 5);
 ```
 
-![Example Output](assets/CaImageExplorer_output1.png "Example of output for showCaRecording")
+![Example Output](assets/output_showExtractedTracesFromCaRecording.png "Example of output for showExtractedTracesFromCaRecording")
+
+
+
+Here's how you can visualize Ca recording image data recording without stimulation:
+
+```matlab
+
+showCaTracesFromRecording('example_data.tiff', 1.2, 20, 20,  'sensitivity', 0.001);
+```
+To visualize Ca recording image data with stimulation:
+```matlab
+showCaTracesFromRecording('example_data.tiff', 1.2, 20, 20,  'sensitivity', 0.001, 'stimTimes', [30 45 60 75 90 105 120], 'stimDuration', 5, 'preWin', 2, 'postWin', 5);
+```
+
+![Example Output](assets/output_showExtractedTracesFromCaRecording.png "Example of output for showExtractedTracesFromCaRecording, with stimulations")
+
+![Example Output](assets/output_showCaTracesFromRecording.png "Example of output for showCaTracesFromRecording without stimulations")
+
 
 
 
 ## To-Do List
 
-- [ ] Implement basic analysis functionality for calcium imaging data.
-- [ ] Add a simple algorithm for extracting calcium traces from TIFF stacks.
 - [ ] Add more flexibility in the plotting, e.g. multiple stimulation types in a trial
 - [ ] Add functionality to deal with multiple trials in a batch (e.g. for averaging)
 

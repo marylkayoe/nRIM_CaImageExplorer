@@ -1,4 +1,4 @@
-function [roiList, traceData, projectionImage] = extractCaTracesFromFile(filename, pixelSize, minSomaSize, framerate)
+function [roiList, traceData, projectionImage] = extractCaTracesFromFile(filename, pixelSize, minSomaSize, framerate, sensitivity)
 % Extract calcium traces from a TIFF file
 %
 % Parameters:
@@ -24,7 +24,7 @@ stdProjection = makeStdProjection(downsampledStack);
 % Adjust brightness and convert to 8-bit
 projectionImage = adjustStackTo8b(stdProjection);
 
-binaryImage = thresholdImageForSomataDetection(projectionImage, minSomaSizePixels);
+binaryImage = thresholdImageForSomataDetection(projectionImage, minSomaSizePixels, sensitivity);
 % Generate ROI list from binary image
 roiList = generateROIListFromBinaryImage(binaryImage);
 if isempty(roiList)

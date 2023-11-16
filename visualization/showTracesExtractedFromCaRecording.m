@@ -1,5 +1,5 @@
 function showCaRecording(filename, framerate, varargin)
-    % showCaRecording Generates a figure with subplots showing a calcium recording and, optionally, stimulus-triggered windows.
+    % showCaRecording: Generates a figure with subplots showing a calcium recording and, optionally, stimulus-triggered windows.
     % the stim-triggered windows are shown as both averages of each ROI and 
     %
     % Parameters:

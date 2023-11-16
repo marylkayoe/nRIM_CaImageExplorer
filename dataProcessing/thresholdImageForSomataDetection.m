@@ -1,4 +1,4 @@
-function binaryImage = thresholdImageForSomataDetection(image, somaDiameterPixels)
+function binaryImage = thresholdImageForSomataDetection(image, somaDiameterPixels, sensitivity)
     % thresholdImageForSomataDetection Applies adaptive thresholding to detect somata
     %
     % This function performs adaptive thresholding on an image to detect bright 
@@ -17,6 +17,10 @@ function binaryImage = thresholdImageForSomataDetection(image, somaDiameterPixel
     %   binaryImage: A binary image where bright regions likely to be somata 
     %                are marked.
 % Calculate neighborhood size
+if not(exist('sensitivity', 'var'))
+    sensitivity = 0.5;
+end
+
 neighborhoodSize = round(somaDiameterPixels * 1.5);
 
 % Ensure neighborhood size is odd
@@ -25,7 +29,7 @@ if mod(neighborhoodSize, 2) == 0
 end
 
 %first simple thresholding
-thresholdValue = adaptthresh(image, 'ForegroundPolarity','bright', 'NeighborhoodSize', neighborhoodSize);
+thresholdValue = adaptthresh(image, sensitivity, 'ForegroundPolarity','bright', 'NeighborhoodSize', neighborhoodSize);
 
 % Create a binary image by applying the threshold
 globalThresholdedImage = imbinarize(image, thresholdValue);

@@ -25,6 +25,7 @@ function plotCaImgProjection(projectionImg, pixelSize, varargin)
     plotTitle = p.Results.title;
 
     [ySize xSize] = size(projectionImg);
+    projectionImg = imadjust(projectionImg);
 
     % Plot STD projection
     imshow(projectionImg, [], 'Parent', axesHandle);
