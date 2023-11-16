@@ -104,9 +104,7 @@ To process all recordings in a folder:
 ```matlab
 showExtractedTracesFromCaRecordingsInFolder('./examples/', 20, 'stimTimes', [30 45 60 75 90 105 120], 'stimDuration', 5, 'preWin', 2, 'postWin', 5);
 ```
-
-![Example Output](assets/output_showExtractedTracesFromCaRecording.png "Example of output for showExtractedTracesFromCaRecording")
-
+![Example Output](assets/output_showExtractedTracesFromCaRecording.png "Example of output for showExtractedTracesFromCaRecording, with stimulations")
 
 
 Here's how you can visualize Ca recording image data recording without stimulation:
@@ -119,8 +117,6 @@ To visualize Ca recording image data with stimulation:
 ```matlab
 showCaTracesFromRecording('example_data.tiff', 1.2, 20, 20,  'sensitivity', 0.001, 'stimTimes', [30 45 60 75 90 105 120], 'stimDuration', 5, 'preWin', 2, 'postWin', 5);
 ```
-
-![Example Output](assets/output_showExtractedTracesFromCaRecording.png "Example of output for showExtractedTracesFromCaRecording, with stimulations")
 
 ![Example Output](assets/output_showCaTracesFromRecording.png "Example of output for showCaTracesFromRecording without stimulations")
 
