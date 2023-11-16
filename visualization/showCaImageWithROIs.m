@@ -18,9 +18,9 @@ function showCaImageWithROIs(image, pixelSize, roiList)
 
     % Loop through each ROI and draw its bounding box
     for i = 1:length(roiList)
-        rectangle('Position', roiList(i).BoundingBox, 'EdgeColor', 'r');
-        text(roiList(i).Centroid(1), roiList(i).Centroid(2), num2str(roiList(i).ID), ...
-             'Color', 'yellow', 'HorizontalAlignment', 'center');
+        rectangle('Position', roiList(i).BoundingBox, 'EdgeColor', 'r', 'LineWidth', 2);
+        text(roiList(i).Centroid(1)+5, roiList(i).Centroid(2)+10, num2str(roiList(i).ID), ...
+             'Color', 'red', 'FontSize', 15, 'HorizontalAlignment', 'center');
     end
 
 
