@@ -112,13 +112,15 @@ Here's how you can visualize Ca recording image data recording without stimulati
 ```matlab
 
 showCaTracesFromRecording('example_data.tiff', 1.2, 20, 20,  'sensitivity', 0.001);
+
+![Example Output](assets/output_showCaTracesFromRecording.png "Example of output for showCaTracesFromRecording without stimulations")
 ```
 To visualize Ca recording image data with stimulation:
 ```matlab
 showCaTracesFromRecording('example_data.tiff', 1.2, 20, 20,  'sensitivity', 0.001, 'stimTimes', [30 45 60 75 90 105 120], 'stimDuration', 5, 'preWin', 2, 'postWin', 5);
 ```
 
-![Example Output](assets/output_showCaTracesFromRecording.png "Example of output for showCaTracesFromRecording without stimulations")
+![Example Output](assets/output_showCaTracesFromRecordingwithStim.png "Example of output for showCaTracesFromRecording without stimulations")
 
 
 
