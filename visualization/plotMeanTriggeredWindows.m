@@ -71,7 +71,7 @@ ylabel(axesHandle, 'Mean Fluorescence (a.u.)');
 title(axesHandle, plotTitle);
 
 % Draw stimulation rectangle
-drawStimulationRectangle(axesHandle, stimDuration, ylim(axesHandle));
+drawStimulationRectangle(axesHandle, 0, stimDuration, ylim(axesHandle));
 
 % Apply the custom figure style
 applyCustomFigureStyle(figHandle, axesHandle);

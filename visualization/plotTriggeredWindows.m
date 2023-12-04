@@ -19,12 +19,12 @@ function plotTriggeredWindows(triggeredWindows, preWin, stimDuration, framerate,
     end
 
     % Calculate and plot the mean trace
-    meanTrace = mean(triggeredWindows, 2, 'omitnan');
+    meanTrace = squeeze(mean(triggeredWindows, 2, 'omitnan'));
     plot(axesHandle, xAx, meanTrace, 'w', 'LineWidth', 2); % White and thicker for mean trace
 
     % Draw the stimulation rectangle
     yLimits = ylim(axesHandle); % Get the current y-axis limits
-    drawStimulationRectangle(axesHandle, stimDuration, yLimits);
+    drawStimulationRectangle(axesHandle, stimDuration, yLimits, [0 0.8 0], 0.2);
 
     % Customize the plot
     xlabel(axesHandle, 'Time (s)');

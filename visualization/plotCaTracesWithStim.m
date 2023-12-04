@@ -51,27 +51,24 @@ function plotCaTracesWithStim(traceData, framerate, varargin)
     % Call the function to plot calcium traces in our figure
     plotCaTracesFromROIdata(traceData, framerate, axesHandle);
 
-    % Overlay stimulation periods if provided
-    if ~isempty(stimTimes) && ~isempty(stimDuration)
-        hold(axesHandle, 'on');
+stimWindowColor = [0.9 0.9 0.9];
+stimWindowOpacity = 0.5;
 
-        for i = 1:length(stimTimes)
-            % Calculate the x coordinates for the left and right edges of the rectangle
-            xLeft = stimTimes(i);
-            xRight = stimTimes(i) + stimDuration;
+ % Overlay stimulation periods if provided
+ if ~isempty(stimTimes) && ~isempty(stimDuration)
+    hold(axesHandle, 'on');
+    for i = 1:length(stimTimes)
+        % The y coordinates are the limits of the y axis
+        yLimits = ylim(axesHandle);
 
-            % The y coordinates are the limits of the y axis
-            yLimits = ylim(axesHandle);
+        % Define the rectangle's position and duration
+        stimStart = stimTimes(i);
 
-            % Define the rectangle's position and size
-            pos = [xLeft, yLimits(1), xRight - xLeft, yLimits(2) - yLimits(1)];
-
-            % Draw the rectangle with some transparency
-            rectangle('Position', pos, 'FaceColor', [0.9 0.9 0.9 0.5], 'EdgeColor', 'none', 'Parent', axesHandle);
-        end
-
-        hold(axesHandle, 'off');
+        % Draw the rectangle for each stimulation period
+        drawStimulationRectangle(axesHandle, stimStart, stimDuration, yLimits, stimWindowColor, stimWindowOpacity); 
     end
+    hold(axesHandle, 'off');
+end
 
     % Set plot title
     title(axesHandle, plotTitle);
