@@ -1,4 +1,4 @@
-function showCaRecording(filename, framerate, varargin)
+function showTracesExtractedFromCaRecording(filename, framerate, varargin)
     % showCaRecording: Generates a figure with subplots showing a calcium recording and, optionally, stimulus-triggered windows.
     % the stim-triggered windows are shown as both averages of each ROI and 
     %
@@ -10,6 +10,9 @@ function showCaRecording(filename, framerate, varargin)
     %   'stimDuration': Duration of each stimulation in seconds
     %   'preWin': Pre-stimulation window duration in seconds
     %   'postWin': Post-stimulation window duration in seconds
+    %   'stimTimes2': Array of stimulation start times in seconds
+    %   'stimDuration2': Duration of each stimulation in seconds
+    % example use: showCaRecording('testData.mat', 20, 'stimTimes', [10, 20, 30], 'stimDuration', 5, 'stimTimes2', [11, 21, 31], 'stimDuration2', 1, 'preWin', 2, 'postWin', 5);
     
     % Parse optional parameters
     p = inputParser;
@@ -17,9 +20,12 @@ function showCaRecording(filename, framerate, varargin)
     addRequired(p, 'framerate', @isnumeric);
     addOptional(p, 'stimTimes', [], @isnumeric);
     addOptional(p, 'stimDuration', 0, @isnumeric);
-    addOptional(p, 'preWin', 5, @isnumeric); % Default pre-window of 2 seconds
+    addOptional(p, 'preWin', 2, @isnumeric); % Default pre-window of 2 seconds
     addOptional(p, 'postWin', 5, @isnumeric); % Default post-window of 5 seconds
     
+    addParameter(p, 'stimTimes2', [], @isnumeric);
+    addParameter(p, 'stimDuration2', 0, @isnumeric);
+
     parse(p, filename, framerate, varargin{:});
     
     % Load the data from the file using the custom read function
@@ -29,6 +35,11 @@ function showCaRecording(filename, framerate, varargin)
     postWin = p.Results.postWin;
     stimDuration = p.Results.stimDuration;
     stimTimes = p.Results.stimTimes;
+
+    stimDuration2 = p.Results.stimDuration2;
+    stimTimes2 = p.Results.stimTimes2;
+    
+
     framerate = p.Results.framerate;
     NUMROWS = 1;
     NUMCOLS = 3;
@@ -45,14 +56,21 @@ function showCaRecording(filename, framerate, varargin)
 
     % If stimTimes is not empty, create two subplots
     if ~isempty(p.Results.stimTimes)
+        % calculate the delay used between plots
+        if ~isempty(p.Results.stimTimes2)
+            stimDelay = stimTimes2(1) - stimTimes(1);
+        else
+            stimDelay = 0;
+        end
         % Subplot for full traces with stimulations
         ax1 = subplot(NUMROWS, NUMCOLS, 1); 
-          plotCaTracesWithStim(traceData, framerate, 'stimTimes', p.Results.stimTimes, 'stimDuration', p.Results.stimDuration, 'plotTitle', 'Full trial traces');
+        plotCaTracesWithStim(traceData, framerate, 'stimTimes', p.Results.stimTimes, 'stimDuration', p.Results.stimDuration, 'stimTimes2', p.Results.stimTimes2, 'stimDuration2', p.Results.stimDuration2,'plotTitle', 'Full trial traces');
         
         % Subplot for the triggered windows
         ax2 = subplot(NUMROWS, NUMCOLS, 2);
         triggeredWindows = extractTriggeredWindows(traceData, p.Results.stimTimes,  p.Results.stimDuration, p.Results.preWin, p.Results.postWin, framerate);
-        plotMeanTriggeredWindows(triggeredWindows, preWin, stimDuration, framerate, 'Stim-triggered means per ROI', 'axesHandle', gca, 'figHandle', figHandle, 'legendText', 'ROI');
+        plotMeanTriggeredWindows(triggeredWindows, preWin, stimDuration, framerate, 'Stim-triggered means per ROI', 'axesHandle', gca, 'figHandle', figHandle, 'legendText', 'ROI', ...
+        'stimDuration2', p.Results.stimDuration2, 'stim2Delay',stimDelay);
         
         % Subplot for the triggered windows
         ax3 = subplot(NUMROWS,NUMCOLS, 3);
@@ -60,9 +78,8 @@ function showCaRecording(filename, framerate, varargin)
         triggeredWindows = extractTriggeredWindows(traceData, p.Results.stimTimes,  p.Results.stimDuration, p.Results.preWin, p.Results.postWin, framerate);
         triggeredPerStimWindows = permute(triggeredWindows, [1, 3, 2]);
 
-        plotMeanTriggeredWindows(triggeredPerStimWindows, preWin, stimDuration, framerate, 'Mean Stim responses over all ROIs ', 'axesHandle', gca, 'figHandle', figHandle, 'legendText', 'STIM');
-        
-
+        plotMeanTriggeredWindows(triggeredPerStimWindows, preWin, stimDuration, framerate, 'Mean Stim responses over all ROIs ', 'axesHandle', gca, 'figHandle', figHandle, 'legendText', 'STIM', ...
+        'stimDuration2', p.Results.stimDuration2, 'stim2Delay', stimDelay);
 
         % Apply custom figure style
         applyCustomFigureStyle(figHandle, [ax1, ax2, ax3]);
