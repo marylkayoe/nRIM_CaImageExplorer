@@ -68,7 +68,12 @@ function plotCaTracesWithStim(traceData, framerate, varargin)
  % Overlay stimulation periods if provided
  if ~isempty(stimTimes) && ~isempty(stimDuration)
      stimWindowColor = [0.9 0.9 0.9];
+     if stimDuration < 0.5
+         stimWindowColor = [1 1 1];
+         stimWindowOpacity = 1;
+     else
 stimWindowOpacity = 0.5;
+     end
     hold(axesHandle, 'on');
     for i = 1:length(stimTimes)
         % The y coordinates are the limits of the y axis
