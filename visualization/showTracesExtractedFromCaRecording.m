@@ -12,7 +12,7 @@ function showTracesExtractedFromCaRecording(filename, framerate, varargin)
     %   'postWin': Post-stimulation window duration in seconds
     %   'stimTimes2': Array of stimulation start times in seconds
     %   'stimDuration2': Duration of each stimulation in seconds
-    % example use: showCaRecording('testData.mat', 20, 'stimTimes', [10, 20, 30], 'stimDuration', 5, 'stimTimes2', [11, 21, 31], 'stimDuration2', 1, 'preWin', 2, 'postWin', 5);
+    % example use: showTracesExtractedFromCaRecording('testData.mat', 20, 'stimTimes', [10, 20, 30], 'stimDuration', 5, 'stimTimes2', [11, 21, 31], 'stimDuration2', 1, 'preWin', 2, 'postWin', 5);
     
     % Parse optional parameters
     p = inputParser;
