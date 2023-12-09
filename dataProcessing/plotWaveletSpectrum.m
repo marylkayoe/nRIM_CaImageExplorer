@@ -33,7 +33,7 @@ function plotWaveletSpectrum(traceData, framerate, varargin)
     % Perform wavelet transform
 
     [wt, f] = cwt(traceData, framerate, 'VoicesPerOctave', 12, 'TimeBandwidth', 10);
-    % cwt(traceData, seconds/framerate,  'TimeBandwidth', 60, 'VoicesPerOctave', 12, 'Parent', ax1);
+  
     % Calculate time vector for plotting
     t = (0:length(traceData) - 1) / framerate;
 
@@ -43,24 +43,7 @@ function plotWaveletSpectrum(traceData, framerate, varargin)
     xlabel("Time (s)")
     ylabel("Frequency (Hz)")
     set(gca, "yscale", "log")
-
-    % Plot wavelet power spectrum
-    % surface(ax1, t, f, abs(wt).^2);
-
-    if ~isempty(stimTimes)
-        hold(gca, 'on');
-
-        for i = 1:length(stimTimes)
-            drawStimulationRectangle(ax1, stimTimes(i), stimDuration, [1 12], [1 1 1], 0.3);
-        end
-
-    end
-
-    axis tight;
-    shading interp;
     view(0, 90);
-    xlabel('Time (s)');
-    ylabel('Frequency (Hz)');
     ylim([0.1 12]);
     title('Wavelet Power Spectrum');
     %clim([0 0.2]);
