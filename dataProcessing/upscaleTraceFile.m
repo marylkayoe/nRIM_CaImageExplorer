@@ -20,4 +20,11 @@ function upscaleTraceFile(traceFileName, oldFrameRate, newFrameRate)
     upscaledTraceFileName = [datafolder, name, '_upscaled_', num2str(newFrameRate), 'fps', ext];
 
     % write the upscaled trace file
-    save(upscaledTraceFileName, 'upscaledTraces');
+    if (strcmp(ext, '.csv'))
+        writematrix(upscaledTraces, upscaledTraceFileName);
+      
+    elseif (strcmp(ext, '.mat'))
+        save(upscaledTraceFileName, 'upscaledTraces', 'metadata');
+    end
+  
+end

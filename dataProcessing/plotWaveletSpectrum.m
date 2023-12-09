@@ -32,7 +32,7 @@ function plotWaveletSpectrum(traceData, framerate, varargin)
 
     % Perform wavelet transform
 
-    [wt, f] = cwt(traceData, framerate, 'VoicesPerOctave', 12, 'TimeBandwidth', 10);
+    [wt, f] = cwt(traceData, framerate, 'VoicesPerOctave', 32, 'FrequencyLimits', [2 12], 'Wavelet', 'amor');
   
     % Calculate time vector for plotting
     t = (0:length(traceData) - 1) / framerate;
