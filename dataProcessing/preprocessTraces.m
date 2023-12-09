@@ -32,7 +32,7 @@ detrendSignal = p.Results.detrend;
     %% normalize data
     % default is to normalize from 0 to 1
     if normalizeSignal
-        traces = normalize(traces, 'range');
+        traces = normalize(traces, 'zscore');
     end
 
     %% return cleaned traces

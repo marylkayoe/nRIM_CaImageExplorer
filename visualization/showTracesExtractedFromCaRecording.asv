@@ -40,7 +40,7 @@ stimTimes = p.Results.stimTimes;
 stimDuration2 = p.Results.stimDuration2;
 stimTimes2 = p.Results.stimTimes2;
 
-yAxisLabel = 'Fluorescence (Z-score)';
+yAxisLabel = 'Fluorescence (AU)';
 
 framerate = p.Results.framerate;
 NUMROWS = 2;
@@ -54,8 +54,6 @@ end
 if (smoothTraces)
     traceData = preprocessTraces(traceData, framerate,  'normalize', true, 'smooth', true, 'detrend', true);
     yAxisLabel = 'Fluorescence (Z-score)';
-else
-    traceData = normalize(traceData, 'zscore');
 end
 
 % Create a new figure
@@ -69,41 +67,34 @@ if ~isempty(p.Results.stimTimes)
     else
         stimDelay = 0;
     end
-
-
     % Subplot for full traces with stimulations
-    ax1 = subplot(NUMROWS, NUMCOLS, [1 2]);
+    ax1 = subplot(NUMROWS, NUMCOLS, []);
     if(stimDelay)
         plotCaTracesWithStim(traceData, framerate, 'stimTimes', p.Results.stimTimes, 'stimDuration', p.Results.stimDuration, 'stimTimes2', p.Results.stimTimes2, 'stimDuration2', p.Results.stimDuration2,'plotTitle', 'Full trial traces', 'yAxisLabel', yAxisLabel, 'stim2Delay', stimDelay');
     else
         plotCaTracesWithStim(traceData, framerate, 'stimTimes', p.Results.stimTimes, 'stimDuration', p.Results.stimDuration, 'plotTitle', 'Full trial traces', 'yAxisLabel', yAxisLabel);
     end
     % Subplot for the triggered windows
-    ax2 = subplot(NUMROWS, NUMCOLS, 3);
+    ax2 = subplot(NUMROWS, NUMCOLS, 2);
     triggeredWindows = extractTriggeredWindows(traceData, p.Results.stimTimes,  p.Results.stimDuration, p.Results.preWin, p.Results.postWin, framerate);
     if(stimDelay) % if there is another, delayed stimulus
         plotMeanTriggeredWindows(triggeredWindows, preWin, stimDuration, framerate, 'Stim-triggered means per ROI', 'axesHandle', gca, 'figHandle', figHandle, 'legendText', 'ROI', ...
-            'stimDuration2', p.Results.stimDuration2, 'stim2Delay',stimDelay, 'yAxisLabel', yAxisLabel);
+            'stimDuration2', p.Results.stimDuration2, 'stim2Delay',stimDelay);
     else
-        plotMeanTriggeredWindows(triggeredWindows, preWin, stimDuration, framerate, 'Stim-triggered means per ROI', 'axesHandle', gca, 'figHandle', figHandle, 'legendText', 'ROI', ...
-            'yAxisLabel', yAxisLabel);
+        plotMeanTriggeredWindows(triggeredWindows, preWin, stimDuration, framerate, 'Stim-triggered means per ROI', 'axesHandle', gca, 'figHandle', figHandle, 'legendText', 'ROI');
     end
 
     % Subplot for the triggered windows
-    ax3 = subplot(NUMROWS,NUMCOLS, 6);
+    ax3 = subplot(NUMROWS,NUMCOLS, 3);
 
     triggeredWindows = extractTriggeredWindows(traceData, p.Results.stimTimes,  p.Results.stimDuration, p.Results.preWin, p.Results.postWin, framerate);
     triggeredPerStimWindows = permute(triggeredWindows, [1, 3, 2]);
 
     plotMeanTriggeredWindows(triggeredPerStimWindows, preWin, stimDuration, framerate, 'Mean Stim responses over all ROIs ', 'axesHandle', gca, 'figHandle', figHandle, 'legendText', 'STIM', ...
-        'stimDuration2', p.Results.stimDuration2, 'stim2Delay', stimDelay, 'yAxisLabel', yAxisLabel);
-    ax4 = subplot(NUMROWS, NUMCOLS, [4 5]);
-plotWaveletSpectrum(traceData, framerate, 'axesHandle', ax4, 'stimTimes', stimTimes, 'stimDuration', stimDuration );
-
-
+        'stimDuration2', p.Results.stimDuration2, 'stim2Delay', stimDelay);
 
     % Apply custom figure style
-    applyCustomFigureStyle(figHandle, [ax1, ax2, ax3, ax4]);
+    applyCustomFigureStyle(figHandle, [ax1, ax2, ax3]);
 else
     % Only one subplot for full traces without stimulations
     ax1 = subplot(2, 1, 1);

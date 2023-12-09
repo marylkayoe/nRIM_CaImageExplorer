@@ -34,6 +34,7 @@ function plotMeanTriggeredWindows(triggeredWindows, preWin, stimDuration, framer
    addParameter(p, 'figHandle', [], @(x) isempty(x) || isa(x, 'matlab.ui.Figure'));
    addParameter(p, 'stim2Delay', 0,  @(x) validateattributes(x, {'numeric'}, {'nonnegative', 'scalar'}));
    addParameter(p, 'stimDuration2', 0,  @(x) validateattributes(x, {'numeric'}, {'nonnegative', 'scalar'}));
+   addParameter(p, 'yAxisLabel', 'Mean Fluorescence (a.u.)', @(x) validateattributes(x, {'char', 'string'}, {'scalartext'}));
     parse(p, triggeredWindows, preWin, stimDuration, framerate, plotTitle, varargin{:});
 
     % Extract the parameters after parsing
@@ -47,6 +48,7 @@ function plotMeanTriggeredWindows(triggeredWindows, preWin, stimDuration, framer
     axesHandle = p.Results.axesHandle;
     figHandle = p.Results.figHandle;
     legendText = p.Results.legendText;
+    yAxisLabel = p.Results.yAxisLabel;
 
     if isempty(axesHandle) || ~isvalid(axesHandle)
      %   figHandle = figure;
@@ -81,7 +83,7 @@ grandMeanHandle =  plot(xAxis, grandMeanTrace, 'w-', 'LineWidth', 2.5); % white 
 
 % Customize the plot
 xlabel(axesHandle, 'Time (s)');
-ylabel(axesHandle, 'Mean Fluorescence (a.u.)');
+ylabel(axesHandle, yAxisLabel);
 title(axesHandle, plotTitle);
 
 % Draw stimulation rectangle

@@ -40,13 +40,14 @@ defaultPlotTitle = 'Calcium traces';
 % Add optional parameters to the input parser
 addOptional(p, 'axesHandle', defaultAxesHandle, @(x) isempty(x) || isa(x, 'matlab.graphics.axis.Axes'));
 addOptional(p, 'plotTitle', defaultPlotTitle, @ischar);
-
+addParameter(p, 'yAxisLabel', 'Fluorescence (a.u.)', @ischar);
 % Parse the input arguments
 parse(p, varargin{:});
 
 % Retrieve the parameters
 axesHandle = p.Results.axesHandle;
 plotTitle = p.Results.plotTitle;
+yAxisLabel = p.Results.yAxisLabel;
 
 % Create a new figure if no axes handle was provided
 if isempty(axesHandle)
@@ -114,7 +115,7 @@ text('Units', 'normalized', 'Position', [0.95, 0.98], 'String', 'ROI', ...
 hold(axesHandle, 'off');
 % Set axes labels and title...
 xlabel(axesHandle, 'Time (s)', 'Color', 'w'); % Set X-axis label color to white
-ylabel(axesHandle, 'Fluorescence (a.u.)', 'Color', 'w'); % Set Y-axis label color to white
+ylabel(axesHandle, yAxisLabel, 'Color', 'w'); % Set Y-axis label color to white
 title(axesHandle, plotTitle, 'Color', 'w'); % Set title text color to white
 set(axesHandle, 'YTick', []);
 applyCustomFigureStyle(gcf, axesHandle);

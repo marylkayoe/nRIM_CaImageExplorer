@@ -43,7 +43,7 @@ function plotCaTracesWithStim(traceData, framerate, varargin)
  addParameter(p, 'stimTimes2', [], @(x) validateattributes(x, {'numeric'}, {'vector', 'nonnegative'}));
     addParameter(p, 'stimDuration2', [], @(x) validateattributes(x, {'numeric'}, {'nonnegative', 'scalar'}));
    
-
+addParameter(p, 'yAxisLabel', 'Fluorescence (a.u.)', @ischar);
     addParameter(p, 'axesHandle', gca, @(x) isempty(x) || isa(x, 'matlab.graphics.axis.Axes'));
     addParameter(p, 'plotTitle', 'Calcium Traces with Stimulation', @(x) validateattributes(x, {'char', 'string'}, {'scalartext'}));
     
@@ -56,12 +56,12 @@ function plotCaTracesWithStim(traceData, framerate, varargin)
 
     stimTimes2 = p.Results.stimTimes2;
     stimDuration2 = p.Results.stimDuration2;
-
+yAxisLabel = p.Results.yAxisLabel;
     axesHandle = p.Results.axesHandle;
     plotTitle = p.Results.plotTitle;
     
     % Call the function to plot calcium traces in our figure
-    plotCaTracesFromROIdata(traceData, framerate, axesHandle);
+    plotCaTracesFromROIdata(traceData, framerate, 'axesHandle', axesHandle, 'yAxisLabel', yAxisLabel);
 
 
 
@@ -112,6 +112,6 @@ end
     % Additional customization
     % Set axes labels and customize the look of the plot
     xlabel(axesHandle, 'Time (s)');
-    ylabel(axesHandle, 'Fluorescence Intensity (a.u.)');
+    ylabel(axesHandle, yAxisLabel);
     set(axesHandle, 'Box', 'off', 'TickDir', 'out'); % Aesthetic preference for axes
 end
