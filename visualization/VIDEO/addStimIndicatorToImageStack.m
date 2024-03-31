@@ -2,13 +2,15 @@ function newStack = addStimIndicatorToImageStack(imageStack, varargin)
     % Adds a stimulus indicator to an image stack
     % useful when you want to add a symbol to your image stack to indicate
     % when a stimulus was presented (e.g. when making a video of the recording)
-    % if two stimuli are to be indicated, the function will add two separate symbols based on
-    % the frames indicated in
+    % note: the main purpose of this function is generation of videos, so the images are
+    % converted to uint8 and scaled to 0-255.
+    % thus DO NOT use this function if you want to do any further processing on the images
+    %
     % Inputs
     % imageStack: a 3D matrix of images (required)
     % varargin: a list of arguments
     %   'stimTimes' (required): a matrix of frame indices when the stimulus is to be indicated; if it's a cell array, each element contains frames
-    % related to a different stimulus
+    % related to a different stimulus.
     %
     %  'stimSymbol' (optional): string (or array of strings) describing the symbol to be used to indicate the stimulus
     % can be either 'circle' or 'square'. Default is 'circle'
@@ -30,18 +32,10 @@ function newStack = addStimIndicatorToImageStack(imageStack, varargin)
     p.addParameter('symbolSize', 10, @isnumeric); % in percent of image height
     p.parse(imageStack, varargin{:});
 
-
     % make a copy of the image stack
     % scale to 0-255 convert to uint8 and make a copy
     newStack = uint8(imageStack / max(imageStack(:)) * 255);
-
-    % check if stimTimes is a 2D matrix and get the number of stimuli
-    if iscell(p.Results.stimTimes)
-        nStim = length(p.Results.stimTimes);
-    else
-        nStim = 1;
-    end
-
+    %
     % get the number of frames in the image stack
     nFrames = size(imageStack, 3);
     stimTimes = p.Results.stimTimes;
@@ -53,6 +47,14 @@ function newStack = addStimIndicatorToImageStack(imageStack, varargin)
     % get the size of the image stack
     [height, width, ~] = size(imageStack);
     symbolColor = 'white';
+
+    % check if stimTimes is a cell array and get the number of stimuli
+    if iscell(p.Results.stimTimes)
+        nStim = length(p.Results.stimTimes);
+    else
+        nStim = 1;
+
+    end
 
     % for one stimulus
     % calculate the center position of the symbol so that it will be at symbolSize % of the image height
@@ -78,34 +80,35 @@ function newStack = addStimIndicatorToImageStack(imageStack, varargin)
     % get the maximum pixel value in the image stack (across all frames)
     maxPixelValue = max(newStack(:));
 
-    % calculate the circle pixels
-    switch stimSymbol
-        case 'circle'
-            % create a circle
-            [x, y] = meshgrid(1:width, 1:height);
-            % circle around the symbolX and symbolX coordinates
-            symbolShape = sqrt((x - symbolX) .^ 2 + (y - symbolY) .^ 2) <= symbolSize / 2;
-        case 'square'
-            % create a square, with left coordinates at symbolX - symbolSizePixels/2 and right coordinates at symbolX + symbolSizePixels/2
-            % edge is symbolSizePixels long
-            symbolShape = zeros(height, width);
-            % Calculate the start and end indices for the y-axis
-            % symbolSize is now the diameter, so we divide by 2 to get the radius
-            startY = max(1, round(symbolY - symbolSize / 2));
-            endY = min(height, round(symbolY + symbolSize / 2));
-
-            % Calculate the start and end indices for the x-axis
-            % symbolSize is now the diameter, so we divide by 2 to get the radius
-            startX = max(1, round(symbolX - symbolSize / 2));
-            endX = min(width, round(symbolX + symbolSize / 2));
-
-            % Use the calculated indices to set the corresponding elements in symbolShape to 1
-            symbolShape(startY:endY, startX:endX) = true;
-
-    end
-
     % loop through the frames indicated in stimTimes
+    % NOTE not implemented yet. so only one stimulus is possible
     for stim = 1:nStim
+
+        % calculate the symbol pixel locations
+        switch stimSymbol
+            case 'circle'
+                % create a circle
+                [x, y] = meshgrid(1:width, 1:height);
+                % circle around the symbolX and symbolX coordinates
+                symbolShape = sqrt((x - symbolX) .^ 2 + (y - symbolY) .^ 2) <= symbolSize / 2;
+            case 'square'
+                % create a square, with left coordinates at symbolX - symbolSizePixels/2 and right coordinates at symbolX + symbolSizePixels/2
+                % edge is symbolSizePixels long
+                symbolShape = zeros(height, width);
+                % Calculate the start and end indices for the y-axis
+                % symbolSize is now the diameter, so we divide by 2 to get the radius
+                startY = max(1, round(symbolY - symbolSize / 2));
+                endY = min(height, round(symbolY + symbolSize / 2));
+
+                % Calculate the start and end indices for the x-axis
+                % symbolSize is now the diameter, so we divide by 2 to get the radius
+                startX = max(1, round(symbolX - symbolSize / 2));
+                endX = min(width, round(symbolX + symbolSize / 2));
+
+                % Use the calculated indices to set the corresponding elements in symbolShape to 1
+                symbolShape(startY:endY, startX:endX) = true;
+
+        end
 
         for frame = stimTimes
             frameImage = newStack(:, :, frame);

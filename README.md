@@ -9,7 +9,6 @@ Besides helping out to get quick insights from imaging data, the purpose of this
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
   - [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Core functions](#core-functions)
   - [Utility Functions](#utility-functions)
@@ -90,6 +89,8 @@ To use nRIM_CaImageExplorer, follow these steps:
 - `generateCustomColormap(numColors)`: Creates a custom colormap for differentiating multiple traces in a plot.
 - `drawStimulationRectangle(axesHandle, stimTime, stimDuration, yLimits)`: Adds a rectangle to the plot to indicate the period of stimulation.
 - `applyCustomFigureStyle(figHandle, axesHandle)`: Applies a custom style to the figure and axes to maintain consistency in the visual appearance of plots.
+- `addStimIndicatorToImageStack(imageStack, stimTimes, stimDuration, framerate)`: Adds a visual indicator to an image stack to show the timing of stimulations. Parameters given as name-value pairs. 
+- `saveImageStackAsTiff( imageStack, savepath, filename, varargin )`: Save a 3D image stack as a tiff file. Parameters given as name-value pairs. imageStack is a 3D matrix of images; use importImageStack to load a tiff stack.
 
 
 ## Examples
@@ -124,7 +125,15 @@ showCaTracesFromRecording('example_data.tiff', 1.2, 20, 20,  'sensitivity', 0.00
 ![Example Output](assets/output_showCaTracesFromRecordingwithStim.png "Example of output for showCaTracesFromRecording without stimulations")
 
 
+To add a visual indicator of stimulation events to an image stack:
+```matlab
+imageStack = importImageStack('example_data.tiff');
+stimTimes = [30:60 75:90 105:120]; % frames during which stimulation occurs, in frames; use sec2frames to convert seconds to frames
+newStack = addStimIndicatorToImageStack(imageStack, stimTimes, 'stimSymbol', 'circle', 'symbolSize', 20); 
+saveImageStackAsTiff(newStack, './', 'example_data_with_stim.tif', 'overwrite', true); % if overwrite is true, it will overwrite the file if it already exists
+```
 
+![Example Output](assets/addStimIndicator.png "Example of output for addStimIndicatorToImageStack")
 
 ## To-Do List
 
