@@ -21,36 +21,45 @@ function newStack = addStimIndicatorToImageStack(imageStack, varargin)
 
     % parse inputs
     p = inputParser;
-    p.addRequired('imageStack', @isnumeric);
+    % p.addRequired('imageStack', @isnumeric);
     % stimTimes is either an array or cell array of numeric arrays
-    p.addRequired('stimTimes', @(x) isnumeric(x) || iscell(x));
-    p.addParameter('stimSymbol', 'circle', @ischar);
+    p.addRequired('stimTimes', @(x)isnumeric(x) || iscell(x));
+    p.addParameter('stimSymbol', 'circle', @ischar); %default is circle
     p.addParameter('symbolColor', 'white', @ischar); % not used, only white is implemented
     p.addParameter('location', 'topLeft', @ischar); % not used yet
     p.addParameter('symbolSize', 10, @isnumeric); % in percent of image height
     p.parse(imageStack, varargin{:});
 
-    newStack = p.Results.imageStack;
+
+    % make a copy of the image stack
+    % scale to 0-255 convert to uint8 and make a copy
+    newStack = uint8(imageStack / max(imageStack(:)) * 255);
 
     % check if stimTimes is a 2D matrix and get the number of stimuli
-    if size(p.Results.stimTimes, 2) > 1
-        nStim = size(p.Results.stimTimes, 2);
+    if iscell(p.Results.stimTimes)
+        nStim = length(p.Results.stimTimes);
     else
         nStim = 1;
     end
 
     % get the number of frames in the image stack
-    nFrames = size(p.Results.imageStack, 3);
+    nFrames = size(imageStack, 3);
+    stimTimes = p.Results.stimTimes;
+    stimSymbol = p.Results.stimSymbol;
+    % calculate the symbol size in pixels
+    symbolSize = p.Results.symbolSize;
+    symbolSizePixels = round(size(imageStack, 1) * symbolSize / 100);
 
     % get the size of the image stack
-    [height, width, ~] = size(p.Results.imageStack);
+    [height, width, ~] = size(imageStack);
+    symbolColor = 'white';
 
     % for one stimulus
     % calculate the center position of the symbol so that it will be at symbolSize % of the image height
     % from the top and left edge of the image
     % (adding functionality of different locations of the symbol is possible but not implemented yet)
-    symbolX = round (width * symbolSize / 100);
-    symbolY = round (height * symbolSize / 100);
+    symbolX = round(width * 0.10);
+    symbolY = round(height * 0.10);
 
     % set the color
     switch symbolColor
@@ -75,24 +84,40 @@ function newStack = addStimIndicatorToImageStack(imageStack, varargin)
             % create a circle
             [x, y] = meshgrid(1:width, 1:height);
             % circle around the symbolX and symbolX coordinates
-            symbolShape = sqrt((x - symbolX) .^ 2 + (y - symbolY) .^ 2) <= symbolSize;
+            symbolShape = sqrt((x - symbolX) .^ 2 + (y - symbolY) .^ 2) <= symbolSize / 2;
         case 'square'
-            % create a square
+            % create a square, with left coordinates at symbolX - symbolSizePixels/2 and right coordinates at symbolX + symbolSizePixels/2
+            % edge is symbolSizePixels long
             symbolShape = zeros(height, width);
-            symbolShape(centerY - symbolY:symbolY + radius, symbolX - radius:symbolX + radius) = 1;
+            % Calculate the start and end indices for the y-axis
+            % symbolSize is now the diameter, so we divide by 2 to get the radius
+            startY = max(1, round(symbolY - symbolSize / 2));
+            endY = min(height, round(symbolY + symbolSize / 2));
+
+            % Calculate the start and end indices for the x-axis
+            % symbolSize is now the diameter, so we divide by 2 to get the radius
+            startX = max(1, round(symbolX - symbolSize / 2));
+            endX = min(width, round(symbolX + symbolSize / 2));
+
+            % Use the calculated indices to set the corresponding elements in symbolShape to 1
+            symbolShape(startY:endY, startX:endX) = true;
+
     end
 
     % loop through the frames indicated in stimTimes
+    for stim = 1:nStim
 
-    for frame = stimTimes
-        frameImage = newStack(:, :, frame);
-        % add the symbol to the image
-        frameImage(symbolShape) = maxPixelValue;
-        % copy the frame back to the image stack
-        % note this is inefficient but makes it easier to read than doing it
-        % in a single line such as
-        % newStack(:, :, frame)(symbolShape) = maxPixelValue;
-        newStack(:, :, frame) = frameImage;
+        for frame = stimTimes
+            frameImage = newStack(:, :, frame);
+            % add the symbol to the image
+            frameImage(find(symbolShape)) = maxPixelValue;
+            % copy the frame back to the image stack
+            % note this is inefficient but makes it easier to read than doing it
+            % in a single line such as
+            % newStack(:, :, frame)(symbolShape) = maxPixelValue;
+            newStack(:, :, frame) = frameImage;
+        end
+
     end
 
 end
