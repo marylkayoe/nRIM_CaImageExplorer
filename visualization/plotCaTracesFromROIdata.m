@@ -9,6 +9,7 @@ function plotCaTracesFromROIdata(traceData, framerate, varargin)
 %   traceData - A 2D matrix containing calcium traces. Rows represent time points, 
 %               and columns represent different ROIs.
 %   framerate - The sampling rate of the imaging in Hz.
+%   smoothWin - The window size for smoothing the traces. Default is 1 (no smoothing).
 %
 % Optional Parameters:
 %   axesHandle - The axes handle where the plot will be drawn. If not provided, 
@@ -41,6 +42,7 @@ defaultPlotTitle = 'Calcium traces';
 addOptional(p, 'axesHandle', defaultAxesHandle, @(x) isempty(x) || isa(x, 'matlab.graphics.axis.Axes'));
 addOptional(p, 'plotTitle', defaultPlotTitle, @ischar);
 addParameter(p, 'yAxisLabel', 'Fluorescence (a.u.)', @ischar);
+addParameter(p, 'smoothWin', 1, @(x) validateattributes(x, {'numeric'}, {'scalar', 'positive'}));
 % Parse the input arguments
 parse(p, varargin{:});
 
@@ -48,6 +50,7 @@ parse(p, varargin{:});
 axesHandle = p.Results.axesHandle;
 plotTitle = p.Results.plotTitle;
 yAxisLabel = p.Results.yAxisLabel;
+smoothWin = p.Results.smoothWin;
 
 % Create a new figure if no axes handle was provided
 if isempty(axesHandle)
@@ -95,6 +98,11 @@ for i = 1:numROIs
     % Offset the trace vertically to prevent overlap
     trace = trace + (i-1) * shiftAmount;
 
+
+    if smoothWin > 1
+        trace = smooth(trace, smoothWin);
+    end
+    
     % Plot the trace with the corresponding color and offset
     plot(axesHandle, xAx, trace, 'Color', cmap(i, :), 'LineWidth', 2);
 

@@ -10,7 +10,7 @@ function [roiList, traceData, projectionImage] = extractCaTracesFromFile(filenam
 tiffStack = importCaImgTiff(filename);
 
 % Define the downsample ratio (you can adjust this as needed)
-downsampleRatio = 2;
+downsampleRatio = 1;
 pixelSize = pixelSize *downsampleRatio;
 
 minSomaSizePixels = minSomaSize / pixelSize;

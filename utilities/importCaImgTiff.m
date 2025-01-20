@@ -1,5 +1,5 @@
 function tiffStack = importCaImgTiff(filename)
-    % Import and Adjust TIFF Stack
+    % Import and Adjust TIFF Stack OLD VERSION
     %
     % Parameters:
     % filename - Path to the TIFF file
