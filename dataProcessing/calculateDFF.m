@@ -1,4 +1,4 @@
-function deltaFoverF = calculateDeltaFoverFRunning(stack, windowSize, spatialSigma)
+function deltaFoverF = calculateDFF(stack, windowSize, spatialSigma)
         % Calculate Delta F/F with spatial smoothing
         %
         % Parameters:

@@ -29,7 +29,7 @@ function showImagingData(tiffStack, frameRate)
     ax = axes('Parent', fig, 'Position', [0.05 0.2 0.9 0.7]);
 
     % Initial frame
-    frame = tiffStack(:, :, 1);
+    frame = double(tiffStack(:, :, 1)); % Convert to double for compatibility
     hImage = imshow(frame, [], 'Parent', ax); % Display with default scaling
     title(ax, sprintf('Frame 1/%d', numFrames));
 
@@ -60,7 +60,7 @@ function showImagingData(tiffStack, frameRate)
     function sliderCallback(src, ~)
         frameNum = round(src.Value);
         frameNumText.String = sprintf('Frame: %d', frameNum);
-        frame = tiffStack(:, :, frameNum);
+        frame = double(tiffStack(:, :, frameNum)); % Convert to double for compatibility
         set(hImage, 'CData', frame); % Update the displayed frame
         caxis(ax, contrastLimits); % Apply the global contrast limits
         title(ax, sprintf('Frame %d/%d', frameNum, numFrames));
@@ -86,9 +86,6 @@ function showImagingData(tiffStack, frameRate)
             playBtn.Value = 0; % Stop playback
         end
 
-        % Convert the displayed image to single precision for compatibility with imcontrast
-        set(hImage, 'CData', single(get(hImage, 'CData')));
-
         % Launch imcontrast
         imcontrast(hImage);
 
@@ -101,13 +98,12 @@ function showImagingData(tiffStack, frameRate)
         start(contrastTimer);
     end
 
-
     % Update contrast limits from caxis
     function updateContrastLimits(~, ~)
         newLimits = caxis(ax);
         if ~isequal(contrastLimits, newLimits)
             contrastLimits = newLimits;
-          %  fprintf('Updated contrast limits: [%f, %f]\n', contrastLimits(1), contrastLimits(2));
+       %     fprintf('Updated contrast limits: [%f, %f]\n', contrastLimits(1), contrastLimits(2));
         end
     end
 end

@@ -23,6 +23,7 @@ function denoisedStack = denoiseCaImgStack(tiffStack, method, varargin)
     % - 'tv': Choose regularization. Smaller values preserve more detail but may leave noise.
     %          Example: denoiseCaImgStack(stack, 'tv', 0.01)
 
+    % NOTE : USUALL GAUSSIAN IS WHAT YOU WANT TO DO
     switch lower(method)
         case 'gaussian'
             % Gaussian filtering
